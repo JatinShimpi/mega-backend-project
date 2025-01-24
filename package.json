@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "nodejs backend project",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javscript",
     "backend"
   ],
   "author": "jatin shimpi",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.9",
+    "prettier": "^3.4.2"
+  }
 }
