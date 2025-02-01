@@ -2,3 +2,5 @@ db connections
     always wrap in try catch
     or promises 
     they are always in another continent, time takes for response, use async await
+
+middleware is used through app.use()
