@@ -23,17 +23,29 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   //3. check duplicate user:check username or email whichever is found first
-  const existedUser = User.findOne({ $or: [{ username }, { email }] });
+  const existedUser = await User.findOne({ $or: [{ username }, { email }] });
   if (existedUser) {
     throw new ApiError(409, "username already exits");
   }
 
   //4. check for images, check for avatar
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
+
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required");
   }
+  console.log(req.files);
+  
 
   //5. upload them to cloudinary check: succesfully uploaded ythe avatar
   const avatar = await uploadOnCloudinary(avatarLocalPath);
