@@ -4,3 +4,5 @@ db connections
     they are always in another continent, time takes for response, use async await
 
 middleware is used through app.use()
+
+to find subscribers of any channel we will find the documents with that channel then count that and vice verca   
