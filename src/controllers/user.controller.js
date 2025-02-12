@@ -290,7 +290,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   }
 
   //TODO: delete old image
-  const user = User.findById(req.user?._id);
+  const user = await User.findById(req.user?._id);
   const oldAvatarUrl = user.avatar;
 
   if (oldAvatarUrl) {
@@ -330,7 +330,20 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Error while uploading on cover");
   }
 
-  const user = await User.findByIdAndUpdate(
+  //todo delete old image
+  const user = await User.findById(req.user?._id);
+  const oldCoverImageUrl = user.coverImage;
+
+  if (oldCoverImageUrl) {
+    try {
+      const publicId = oldCoverImageUrl.split("/").pop().split(".")[0];
+      await deleteFromCloudinary(publicId);
+    } catch (error) {
+      console.error("Failed to delete old cover image:", error);
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -344,7 +357,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "coverimage updated succesfully"));
+    .json(new ApiResponse(200, updatedUser, "coverimage updated succesfully"));
 });
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
